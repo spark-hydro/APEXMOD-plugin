@@ -65,6 +65,7 @@ from .dialogs import create_salt_dlg
 
 
 # import sub functions from pyfolder -----------------------------------#
+from .pyfolder import sysutil
 from .pyfolder import db_functions
 from .pyfolder import runSim_link
 from .pyfolder import modflow_functions
@@ -94,6 +95,7 @@ import glob
 import posixpath
 import ntpath
 import shutil
+import sys
 import processing
 
 # import matplotlib.pyplot as plt
@@ -1458,16 +1460,33 @@ class APEXMOD(object):
     def run_apexmf_model(self):
         import subprocess
         output_dir = APEXMOD_path_dict['apexmf_model']
-        bnam_latest = "amrs_rel24-002.exe"
-        bnam_default = "apexmf1.1_64rel.exe"
-        if os.path.isfile(os.path.join(output_dir, bnam_latest)):
-            exe_file = os.path.normpath(os.path.join(output_dir, bnam_latest))
-        else:
-            exe_file = os.path.normpath(os.path.join(output_dir, bnam_default))
 
-        # os.startfile(File_Physical)
-        p = subprocess.Popen(exe_file , cwd = output_dir) # cwd -> current working directory    
-        # p.wait()  ## following line to wait till running is finished. 
+        exe_file = sysutil.find_amrs_exe(output_dir)
+        if exe_file is None:
+            msgBox = QMessageBox()
+            msgBox.setWindowIcon(QtGui.QIcon(':/APEXMOD/pics/am_icon.png'))
+            msgBox.setWindowTitle("Executable not found")
+            msgBox.setText(
+                "No AMRS executable was found in\n{}\n\n"
+                "Linux/macOS: copy an AMRS build there (see "
+                "https://github.com/spark-hydro/AMRS/releases).".format(output_dir))
+            msgBox.exec_()
+            return
+        sysutil.ensure_executable(exe_file)
+
+        if sys.platform.startswith("win"):
+            # QGIS is a GUI program, so Windows opens a console window for the model
+            p = subprocess.Popen(exe_file, cwd=output_dir) # cwd -> current working directory
+        else:
+            # no console window on Linux/macOS: keep the screen output in a file
+            log = open(os.path.join(output_dir, "amrs_run.log"), "w")
+            p = subprocess.Popen(
+                [exe_file], cwd=output_dir, stdout=log, stderr=subprocess.STDOUT)
+            log.close() # the model keeps its own copy of the handle
+            self.iface.messageBar().pushInfo(
+                "APEXMOD",
+                "AMRS started. Screen output: {}".format(log.name))
+        # p.wait()  ## following line to wait till running is finished.
 
     def check_outputs(self):
         self.dirs_and_paths()

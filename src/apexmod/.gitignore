@@ -16,3 +16,7 @@ dist
 .trash/
 APEXMOD.code-workspace
 unins000.dat
+
+# AMRS programs, downloaded by scripts/fetch_amrs.sh
+FOLDER_FOR_COPY/APEX-MODFLOW/amrs
+FOLDER_FOR_COPY/APEX-MODFLOW/amrs.exe
