@@ -32,6 +32,60 @@ class OpenFileTest(unittest.TestCase):
         sf.assert_called_once_with(os.path.normpath("C:/x/out.gif"))
 
 
+def _touch(folder, *names):
+    for n in names:
+        open(os.path.join(folder, n), "w").close()
+
+
+class FindExeTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = self.tmp.name
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_nothing_found(self):
+        self.assertIsNone(sysutil.find_amrs_exe(self.dir, "linux"))
+        self.assertIsNone(sysutil.find_amrs_exe(self.dir, "win32"))
+
+    def test_windows_old_programs_keep_their_priority(self):
+        _touch(self.dir, "apexmf1.1_64rel.exe")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "win32")),
+                         "apexmf1.1_64rel.exe")
+        _touch(self.dir, "amrs_rel24-002.exe")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "win32")),
+                         "amrs_rel24-002.exe")
+
+    def test_windows_prefers_the_release_program(self):
+        _touch(self.dir, "amrs_rel24-002.exe", "apexmf1.1_64rel.exe",
+               "amrs-v0.1.9-gnu-win_amd64-Rel.exe", "amrs-v0.1.10-gnu-win_amd64-Rel.exe",
+               "amrs-v0.1.10-gnu-win_amd64-Rel.zip")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "win32")),
+                         "amrs-v0.1.10-gnu-win_amd64-Rel.exe")
+        _touch(self.dir, "amrs.exe")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "win32")),
+                         "amrs.exe")
+
+    def test_windows_ignores_the_linux_program(self):
+        _touch(self.dir, "amrs", "amrs-v0.1.5-gnu-lin_x86_64-Rel")
+        self.assertIsNone(sysutil.find_amrs_exe(self.dir, "win32"))
+
+    def test_linux_ignores_exe_files(self):
+        _touch(self.dir, "apexmf1.1_64rel.exe", "amrs_rel24-002.exe", "amrs.exe")
+        self.assertIsNone(sysutil.find_amrs_exe(self.dir, "linux"))
+
+    def test_linux_prefers_plain_name_then_newest_release(self):
+        _touch(self.dir, "amrs-v0.1.9-gnu-lin_x86_64-Rel",
+               "amrs-v0.1.10-gnu-lin_x86_64-Rel",
+               "amrs-v0.1.10-gnu-lin_x86_64-Rel.zip")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "linux")),
+                         "amrs-v0.1.10-gnu-lin_x86_64-Rel")
+        _touch(self.dir, "amrs")
+        self.assertEqual(os.path.basename(sysutil.find_amrs_exe(self.dir, "linux")),
+                         "amrs")
+
+
 class EnsureExecutableTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
