@@ -1,0 +1,162 @@
+# APEXMOD CI, modeled on QSWATMOD2 (.github/workflows/build.yml) and spark-hydro/AMRS
+#
+# tests    unit tests that need no QGIS (Linux and Windows) and a syntax check
+# package  builds the ZIPs with the Linux and Windows AMRS programs, checks them, tests install.sh
+# windows  installs the full ZIP with install.ps1 (Windows PowerShell 5.1, then PowerShell 7) and starts
+#          the installed amrs.exe (--version). No model is run on Windows (see BUILD.md)
+# qgis     installs the Linux ZIP with install.sh into QGIS 3.44 (qgis/qgis image), loads the plugin,
+#          imports every module, and does what a user does on the Animas example data
+#          (Inputs/apexmod_data.zip): new project, MODFLOW model, linking step, Run button (about 1 min)
+
+name: Build APEXMOD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Syntax check
+        # plugin_upload.py is an unused Plugin Builder template with an indentation error (not in the ZIP)
+        run: python -m compileall -q -x "plugin_upload\.py" src/apexmod scripts
+
+      - name: Unit tests
+        run: |
+          python src/apexmod/test/test_sysutil.py
+          python src/apexmod/test/test_package.py
+
+  package:
+    name: package and install.sh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: AMRS programs (Linux and Windows)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AMRS_PLATFORM: all
+        run: scripts/fetch_amrs.sh
+
+      - name: Build and check the ZIPs
+        run: |
+          python3 scripts/package.py --xml
+          python3 scripts/package.py --linux --xml
+          python3 scripts/package.py --check dist/APEXMOD.*[0-9].zip
+          python3 scripts/package.py --check dist/APEXMOD.*-linux.zip
+          ls -hl dist
+
+      - name: install.sh (local ZIP, then uninstall)
+        run: |
+          zip=$(ls dist/APEXMOD.*-linux.zip)
+          ./install.sh --zip "$zip" --plugins-dir "$RUNNER_TEMP/plugins"
+          test -x "$RUNNER_TEMP/plugins/APEXMOD/FOLDER_FOR_COPY/APEX-MODFLOW/amrs"
+          test -f "$RUNNER_TEMP/plugins/APEXMOD/pyfolder/sysutil.py"
+          "$RUNNER_TEMP/plugins/APEXMOD/FOLDER_FOR_COPY/APEX-MODFLOW/amrs" --version
+          ./install.sh --uninstall --plugins-dir "$RUNNER_TEMP/plugins"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+  windows:
+    name: Windows install
+    needs: package
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the ZIPs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: install.ps1 (Windows PowerShell 5.1)
+        shell: bash
+        run: |
+          zip=$(ls dist/APEXMOD.*[0-9].zip)
+          plugins="$RUNNER_TEMP\\plugins"
+          powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1 -Zip "$zip" -PluginsDir "$plugins"
+          exe="$plugins/APEXMOD/FOLDER_FOR_COPY/APEX-MODFLOW/amrs.exe"
+          test -f "$plugins/APEXMOD/metadata.txt"
+          test -f "$plugins/APEXMOD/pyfolder/sysutil.py"
+          test -f "$exe"
+          "$exe" --version
+
+      - name: install.ps1 (PowerShell 7 over it), then uninstall
+        shell: bash
+        run: |
+          zip=$(ls dist/APEXMOD.*[0-9].zip)
+          plugins="$RUNNER_TEMP\\plugins"
+          pwsh -NoProfile -File install.ps1 -Zip "$zip" -PluginsDir "$plugins"
+          test -f "$plugins/APEXMOD/FOLDER_FOR_COPY/APEX-MODFLOW/amrs.exe"
+          powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1 -Uninstall -PluginsDir "$plugins"
+          test ! -e "$plugins/APEXMOD"
+
+  qgis:
+    name: QGIS 3.44 (qgis/qgis image)
+    needs: package
+    runs-on: ubuntu-latest
+    container:
+      image: qgis/qgis:3.44
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download the ZIPs
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: QGIS and Python packages
+        run: |
+          python3 -c "import qgis.core; print('QGIS', qgis.core.Qgis.QGIS_VERSION)"
+          missing=""
+          for m in numpy pandas matplotlib scipy PIL; do
+            python3 -c "import $m" 2>/dev/null || missing="$missing $m"
+          done
+          echo "missing Python modules:${missing:- none}"
+          if [ -n "$missing" ]; then
+            apt-get update -qq
+            apt-get install -y -qq python3-numpy python3-pandas python3-matplotlib python3-scipy python3-pil
+          fi
+
+      - name: Install the plugin with install.sh
+        run: ./install.sh --zip "$(ls dist/APEXMOD.*-linux.zip)" --plugins-dir "$RUNNER_TEMP/plugins"
+
+      - name: Example data (Inputs/apexmod_data.zip)
+        run: python3 -m zipfile -e Inputs/apexmod_data.zip "$RUNNER_TEMP/data"
+
+      - name: Check the plugin in QGIS
+        run: |
+          python3 scripts/ci_qgis_check.py \
+            --plugins-dir "$RUNNER_TEMP/plugins" \
+            --data "$RUNNER_TEMP/data"

@@ -44,8 +44,25 @@ unless you pass `--force`.
 
 ## Releases and CI
 
-GitHub Actions workflows (tests on Linux and Windows, a QGIS 3.44 check, and the release build
-from a tag) are added in the next step; this section will describe them then.
+- `.github/workflows/build.yml` (push to `main`, pull requests): unit tests on Linux and Windows;
+  the ZIPs and `install.sh`; on Windows `install.ps1` (Windows PowerShell 5.1 and PowerShell 7) and the
+  installed `amrs.exe --version`; and QGIS 3.44 (`qgis/qgis` image): installs the Linux ZIP with
+  `install.sh`, loads the plugin, imports every module and, on the Animas example data
+  (`Inputs/apexmod_data.zip`), creates a project, a 1000 m MODFLOW model, runs the linking step and
+  the Run button code with the Linux AMRS program (`scripts/ci_qgis_check.py`, about a minute).
+  **No model is run on Windows**, and the numbers of the example model are not compared with
+  anything: the AMRS repository has the regression test for the program itself.
+- `.github/workflows/release.yml`: push a tag equal to `v` + `version=` in `metadata.txt`
+  (`git tag v1.6.0 && git push origin v1.6.0`) to build both ZIPs, `plugins.xml`,
+  `plugins-linux.xml` and `SHA256SUMS` and attach them, with `install.sh` and `install.ps1`, to a
+  GitHub Release. Manual runs and pull requests that touch the packaging build and upload workflow
+  artifacts only.
+- Both programs come from the AMRS release named in `amrs-version.txt`
+  (`scripts/fetch_amrs.sh`); change the file to ship another version.
+- Run the QGIS check locally in the same image:
+  `docker run --rm -v $PWD:/work -v /path/to/unpacked/apexmod_data:/data:ro qgis/qgis:3.44 bash -c '...'`
+  (install pandas, run `install.sh --zip dist/APEXMOD.<version>-linux.zip --plugins-dir /tmp/plugins`, then
+  `QT_QPA_PLATFORM=offscreen python3 /work/scripts/ci_qgis_check.py --plugins-dir /tmp/plugins --data /data`).
 
 ## Tests
 
