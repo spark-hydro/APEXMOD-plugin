@@ -3,8 +3,9 @@
 The plugin is Python only, so there is nothing to compile. A release is a ZIP with the
 plugin folder (`src/apexmod`, installed as `APEXMOD/`) and the AMRS programs (`amrs` for
 Linux and `amrs.exe` for Windows, both downloaded from the [AMRS](https://github.com/spark-hydro/AMRS)
-release and not stored in git; the older Intel builds `amrs_rel24-002.exe` (in `APEX-MODFLOW`) and
-`amrs_deb24-002.exe` (a debug build in `apexmf_exes`) are).
+release and not stored in git; only the old Intel debug build `amrs_deb24-002.exe` in
+`apexmf_exes` is). The plugin still finds the old Intel `amrs_rel24-002.exe` that projects made
+with version 1.5 contain.
 
 ## Build the ZIP
 
