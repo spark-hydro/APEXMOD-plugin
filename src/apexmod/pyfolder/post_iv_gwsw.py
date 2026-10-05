@@ -804,22 +804,22 @@ def plot_gwsw_ani (self):
             dpi = None
 
         if self.dlg.radioButton_gwsw_day.isChecked():
-            if not os.path.exists(exported + "\\gwsw_day"):
-                os.makedirs(exported + "\\gwsw_day")
+            if not os.path.exists(os.path.join(exported, "gwsw_day")):
+                os.makedirs(os.path.join(exported, "gwsw_day"))
             plt.savefig(os.path.join(
-                exported + "\\gwsw_day", ('daily_{:03d}'.format(count)+'.png')),
+                os.path.join(exported, "gwsw_day"), ('daily_{:03d}'.format(count)+'.png')),
                 dpi=dpi)
         elif self.dlg.radioButton_gwsw_month.isChecked():
-            if not os.path.exists(exported + "\\gwsw_month"):
-                os.makedirs(exported + "\\gwsw_month")
+            if not os.path.exists(os.path.join(exported, "gwsw_month")):
+                os.makedirs(os.path.join(exported, "gwsw_month"))
             plt.savefig(
-                os.path.join(exported + "\\gwsw_month", ('monthly_{:03d}'.format(count)+'.png')),
+                os.path.join(os.path.join(exported, "gwsw_month"), ('monthly_{:03d}'.format(count)+'.png')),
                 dpi=dpi)
         elif self.dlg.radioButton_gwsw_year.isChecked():
-            if not os.path.exists(exported + "\\gwsw_annual"):
-                os.makedirs(exported + "\\gwsw_annual")
+            if not os.path.exists(os.path.join(exported, "gwsw_annual")):
+                os.makedirs(os.path.join(exported, "gwsw_annual"))
             plt.savefig(
-                os.path.join(exported + "\\gwsw_annual", ('yearly_{:03d}'.format(count)+'.png')),
+                os.path.join(os.path.join(exported, "gwsw_annual"), ('yearly_{:03d}'.format(count)+'.png')),
                 dpi=dpi)
 
         plt.clf()

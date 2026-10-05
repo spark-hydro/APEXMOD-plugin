@@ -88,7 +88,6 @@ from .pyfolder import write_rt3d
 # ----------------------------------------------------------------------#
 import time
 from datetime import datetime
-import distutils.dir_util
 import os
 import os.path
 import glob
@@ -122,7 +121,7 @@ class APEXMOD(object):
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = (QSettings().value('locale/userLocale') or 'en')[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
@@ -1202,9 +1201,9 @@ class APEXMOD(object):
         # self.dlg.Project_Directory.setText(Out_folder)
         # copy the initial projectfolder
         if os.path.exists(Out_folder):
-            distutils.dir_util.remove_tree(Out_folder)
+            shutil.rmtree(Out_folder)
         
-        distutils.dir_util.copy_tree(In_folder, Out_folder)
+        shutil.copytree(In_folder, Out_folder, dirs_exist_ok=True)
         time.sleep(1)
         #the project database is updated
         #self.DB_CreateConnection()

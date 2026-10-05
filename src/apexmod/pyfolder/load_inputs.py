@@ -12,7 +12,6 @@ import glob
 import posixpath
 import ntpath
 import shutil
-import distutils.dir_util
 from datetime import datetime
 from qgis.PyQt.QtCore import QVariant, QSettings, QFileInfo, QCoreApplication
 from PyQt5.QtWidgets import (
@@ -203,8 +202,7 @@ def select_mf_model(self):
         proj = QgsProject.instance()
         Project_Name = QFileInfo(proj.fileName()).baseName()
         Out_folder = APEXMOD_path_dict['MODFLOW']
-        #distutils.dir_util.remove_tree(Out_folder)
-        distutils.dir_util.copy_tree(directory, Out_folder)
+        shutil.copytree(directory, Out_folder, dirs_exist_ok=True)
         time = datetime.now().strftime('[%m/%d/%y %H:%M:%S]')
         self.dlg.textEdit_sm_link_log.append(time+' -> ' + "Copying orginal MODFLOW inputs ... processing")
         self.dlg.progressBar_step.setValue(0)

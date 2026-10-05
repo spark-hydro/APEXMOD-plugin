@@ -21,6 +21,7 @@ import processing
 from qgis.gui import QgsMapCanvas
 import glob
 from PIL import Image
+from .sysutil import open_file
 
 def comps_dic():
     comps_dic = {
@@ -968,4 +969,4 @@ def cvt_vtr(self):
                     questionBox, 'Open?', 
                     'Do you want to open the animated gif file?', QMessageBox.Yes, QMessageBox.No)
     if reply == QMessageBox.Yes:
-        os.startfile(os.path.join(rasterpath, '{}.gif'.format(selectedVector)))
+        open_file(os.path.join(rasterpath, '{}.gif'.format(selectedVector)))
