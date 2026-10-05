@@ -8,9 +8,9 @@
 
 [general]
 name=APEXMOD
-qgisMinimumVersion=3.44
+qgisMinimumVersion=3.28
 description=This plugin helps link APEX and MODFLOW model.
-version=1.6.0
+version=1.6.1
 author=Seonggyu Park
 email=seonggyu.park@brc.tamus.edu
 
@@ -22,7 +22,9 @@ repository=https://github.com/spark-hydro/APEXMOD-plugin
 
 # Recommended items:
 
-changelog=1.6.0
+changelog=1.6.1
+    - The minimum QGIS version is now 3.28 (the same as QSWATMOD2). Version 1.6.0 said 3.44 and QGIS 3.40 refused to enable the plugin. Only QGIS 3.44 LTR is tested automatically.
+    1.6.0
     - Linux support: the AMRS program for Linux (amrs, https://github.com/spark-hydro/AMRS) is included and used by the Run button; its screen output goes to amrs_run.log.
     - Windows: the Run button uses amrs.exe, the gfortran build of AMRS v0.1.0. Projects made with older versions keep their own amrs_rel24-002.exe, which is still found. Its RT3D (nitrate) concentrations differ from those of the Linux and the older Intel builds on the Animas example (not settled yet).
     - Works with Python 3.12 and NumPy 2 (no distutils; NumPy names fixed in the bundled FloPy); starts when the QGIS profile has no locale setting; no os.startfile or backslash paths in the code.

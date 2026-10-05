@@ -888,7 +888,7 @@ def export_sd_daily(self):
     outletSubNum = int(self.dlg.comboBox_sub_number.currentText())
 
     # Add info
-    version = "version 1.6.0 "
+    version = "version 1.6.1 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
@@ -1051,7 +1051,7 @@ def export_sd_monthly(self):
     outletSubNum = int(self.dlg.comboBox_sub_number.currentText())
 
     # Add info
-    version = "version 1.6.0 "
+    version = "version 1.6.1 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
     if self.dlg.checkBox_stream_obd.isChecked():
         strObd = pd.read_csv(
@@ -1169,7 +1169,7 @@ def export_sd_mTa(self):
     outletSubNum = int(self.dlg.comboBox_sub_number.currentText())
 
     # Add info
-    version = "version 1.6.0 "
+    version = "version 1.6.1 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
@@ -1298,7 +1298,7 @@ def export_sd_annual(self):
     outletSubNum = int(self.dlg.comboBox_sub_number.currentText())
 
     # Add info
-    version = "version 1.6.0 "
+    version = "version 1.6.1 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
