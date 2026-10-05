@@ -1206,6 +1206,9 @@ class APEXMOD(object):
             shutil.rmtree(Out_folder)
         
         shutil.copytree(In_folder, Out_folder, dirs_exist_ok=True)
+        # git does not keep empty folders: create the ones the plugin writes to
+        for path in self.dirs_and_paths().values():
+            os.makedirs(path, exist_ok=True)
         time.sleep(1)
         #the project database is updated
         #self.DB_CreateConnection()
