@@ -13,13 +13,13 @@ AMRS_PLATFORM=all scripts/fetch_amrs.sh   # amrs (Linux) and amrs.exe (Windows) 
                                        # AMRS release in amrs-version.txt (default: Linux only)
 python3 scripts/package.py --xml       # dist/APEXMOD.<version>.zip + plugins.xml  (both programs)
 python3 scripts/package.py --linux --xml   # dist/APEXMOD.<version>-linux.zip + plugins-linux.xml (Linux program only)
-python3 scripts/package.py --check dist/APEXMOD.1.5.3.zip   # layout check only
+python3 scripts/package.py --check dist/APEXMOD.1.6.0.zip   # layout check only
 ```
 
 - The version comes from `src/apexmod/metadata.txt`. The ZIP has one top-level folder,
   `APEXMOD/`, with `metadata.txt` directly inside.
 - **File name:** `APEXMOD.<version>[-linux].zip`. QGIS takes the plugin id from the file
-  name up to the first dot, so `APEXMOD-1.5.3.zip` would be read as the plugin
+  name up to the first dot, so `APEXMOD-1.6.0.zip` would be read as the plugin
   `APEXMOD-2` and updates would not be recognised.
 - The ZIP is reproducible (fixed time stamps): the same files give the same checksum.
 - QGIS "Install from ZIP" does not keep file permissions; the plugin sets the execute bit
@@ -29,12 +29,12 @@ python3 scripts/package.py --check dist/APEXMOD.1.5.3.zip   # layout check only
 
 ## Install a local build
 
-Windows: `.\install.ps1 -Zip dist\APEXMOD.1.5.3.zip` (`-PluginsDir DIR` for another folder, `-Uninstall`).
+Windows: `.\install.ps1 -Zip dist\APEXMOD.1.6.0.zip` (`-PluginsDir DIR` for another folder, `-Uninstall`).
 Linux:
 
 ```bash
-./install.sh --zip dist/APEXMOD.1.5.3-linux.zip                 # default QGIS profile
-./install.sh --zip dist/APEXMOD.1.5.3-linux.zip --plugins-dir /tmp/plugins
+./install.sh --zip dist/APEXMOD.1.6.0-linux.zip                 # default QGIS profile
+./install.sh --zip dist/APEXMOD.1.6.0-linux.zip --plugins-dir /tmp/plugins
 ./install.sh --uninstall
 ```
 
