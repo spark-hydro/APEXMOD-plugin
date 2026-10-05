@@ -289,7 +289,7 @@ Export data only selected
 """
 def export_cha(self):
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
     APEXMOD_path_dict = self.dirs_and_paths()
     startDate, endDate, duration = DefineTime.get_start_end_time(self)
@@ -330,7 +330,7 @@ def export_cha(self):
 
 def export_cha_sims_obds(self):
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
     APEXMOD_path_dict = self.dirs_and_paths()
     outfolder = APEXMOD_path_dict['exported_files']
@@ -378,7 +378,7 @@ def export_sd_daily(self):
     outletSubNum = int(self.dlg.comboBox_cha_sub_no.currentText())
 
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
@@ -541,7 +541,7 @@ def export_sd_monthly(self):
     outletSubNum = int(self.dlg.comboBox_cha_sub_no.currentText())
 
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
     if self.dlg.checkBox_stream_obd.isChecked():
         strObd = pd.read_csv(
@@ -659,7 +659,7 @@ def export_sd_mTa(self):
     outletSubNum = int(self.dlg.comboBox_cha_sub_no.currentText())
 
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
@@ -788,7 +788,7 @@ def export_sd_annual(self):
     outletSubNum = int(self.dlg.comboBox_cha_sub_no.currentText())
 
     # Add info
-    version = "version 1.5."
+    version = "version 1.6.0 "
     time = datetime.now().strftime('- %m/%d/%y %H:%M:%S -')
 
     if self.dlg.checkBox_stream_obd.isChecked():
