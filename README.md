@@ -12,7 +12,7 @@ This repository contains the source code of APEXMOD, the example dataset and the
 
 -----
 # <img src="./imgs/icon2.png" style="float" width="80" align="center"> &nbsp; Installation
-The QGIS3 software must be installed on the system prior to the installation of APEXMOD. APEXMOD 1.6.0 is tested with QGIS 3.44 LTR (3.44.14 and 3.44.15) on Linux; the install scripts are also run on Windows by the GitHub Actions of this repository. Older QGIS 3 versions are not supported by this release (long term release version recommended). Download the [QGIS](https://www.qgis.org/en/site/forusers/download.html)
+The QGIS3 software must be installed on the system prior to the installation of APEXMOD. APEXMOD 1.6.1 asks for QGIS 3.28 or newer (QGIS 3). It is tested automatically with QGIS 3.44 LTR (3.44.14 and 3.44.15) on Linux; the install scripts are also run on Windows by the GitHub Actions of this repository. Other QGIS 3 versions are not tested by us (long term release version recommended). Download the [QGIS](https://www.qgis.org/en/site/forusers/download.html)
 
 - Install one of the versions of QGIS. It can be downloaded from https://qgis.org/en/site/forusers/download.html.
 - Install the plugin in one of three ways: see [Installation on Linux](#installation-on-linux) and [Installation on Windows](#installation-on-windows) below.
