@@ -8,7 +8,7 @@
         begin                : 2020-01-23
         copyright            : (C) 2020 by Seonggyu Park
         email                : seonggyu.park@brc.tamus.edu
-        git sha              : https://github.com/spark-brc/APEXMOD
+        git sha              : https://github.com/spark-hydro/APEXMOD-plugin
  ***************************************************************************/
 
 /***************************************************************************

@@ -6,25 +6,16 @@ APEXMOD is a QGIS-based graphical user interface that facilitates linking [APEX]
 
 This repository contains the source code of APEXMOD, the example dataset and the tools to build and install it. Releases (plugin ZIPs for Windows and Linux, install scripts, QGIS plugin repository files) are on the Releases page.
 - **[Releases](https://github.com/spark-hydro/APEXMOD-plugin/releases):** plugin ZIPs, `install.sh` (Linux), `install.ps1` (Windows), `plugins.xml`
-- __[Installer](https://github.com/spark-brc/APEXMOD-plugin/raw/main/Installer/APEXMOD.exe):__ APEXMOD 1.5.exe
-- **[Inputs](https://github.com/spark-brc/APEXMOD/releases/download/v1.4.3/apexmod_data.zip):** Animas Dataset zip file
-- **[Salt_Test_Dataset](https://github.com/spark-brc/APEXMOD/releases/download/v1.3.1/APEXMOD_salt_test.zip):** Price Dataset zip file
-- **[Source Code](https://github.com/spark-brc/APEXMOD/tree/master/APEXMOD)**
+- **[Inputs](https://github.com/spark-hydro/APEXMOD-plugin/tree/main/Inputs):** `apexmod_data.zip`, the Animas dataset
+- **[Source Code](https://github.com/spark-hydro/APEXMOD-plugin/tree/main/src/apexmod)**
 - **[Tutorial Document (example)]()** will be provided soon!
 
 -----
 # <img src="./imgs/icon2.png" style="float" width="80" align="center"> &nbsp; Installation
-The QGIS3 software must be installed on the system prior to the installation of APEXMOD. We've tested APEXMOD with the “long term release (LTR)” (3.28.14) and "latest release (RC)" (3.34.0) versions of QGIS3 (long term release version recommended). Download the [QGIS](https://www.qgis.org/en/site/forusers/download.html)
+The QGIS3 software must be installed on the system prior to the installation of APEXMOD. APEXMOD 1.6.0 is tested with QGIS 3.44 LTR (3.44.14 and 3.44.15) on Linux; the install scripts are also run on Windows by the GitHub Actions of this repository. Older QGIS 3 versions are not supported by this release (long term release version recommended). Download the [QGIS](https://www.qgis.org/en/site/forusers/download.html)
 
 - Install one of the versions of QGIS. It can be downloaded from https://qgis.org/en/site/forusers/download.html.
-- Download [the APEXMOD installer](https://github.com/spark-brc/APEXMOD-plugin/raw/main/Installer/APEXMOD.exe) and install it by running APEXMOD 1.0.exe or a later version. The APEXMOD is installed into the user's home directory *(~\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\APEXMOD)*, which we will refer to as the APEXMOD plugin directory.
-
-<p align="center">
-    <img src="./imgs/fig_01.png" width="200" align="center">
-</p>
-<p align="center">
-    <img src="./imgs/fig_02.png" width="500">
-</p>
+- Install the plugin in one of three ways: see [Installation on Linux](#installation-on-linux) and [Installation on Windows](#installation-on-windows) below.
 
 APEXMOD includes all dependencies ([FloPy](https://www.usgs.gov/software/flopy-python-package-creating-running-and-post-processing-modflow-based-models) ([Bakker et al., 2016](https://onlinelibrary.wiley.com/doi/abs/10.1002/hyp.10933)) and [PyShp](https://pypi.org/project/pyshp/)) directly in the plugin to avoid user-installation.  
 - Open QGIS3 after the installation of APEXMOD is finished.
