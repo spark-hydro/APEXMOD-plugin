@@ -292,7 +292,7 @@ def binaryread_struct(file, vartype, shape=(1,), charlen=16):
         # find the number of bytes for one value
         numbytes = vartype(1).nbytes
         # find the number of values
-        nval = np.core.fromnumeric.prod(shape)
+        nval = np.prod(shape)
         fmt = str(nval) + fmt
         s = file.read(numbytes * nval)
         result = struct.unpack(fmt, s)
