@@ -95,6 +95,7 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
+          name: APEXMOD-${{ github.ref_name }}
           files: |
             dist/APEXMOD.*.zip
             dist/plugins.xml
