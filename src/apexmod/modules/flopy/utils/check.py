@@ -255,7 +255,7 @@ class check:
             return np.recarray((0), dtype=dtype)
         ra = recarray(array, dtype)
         # at = array.transpose()
-        # a = np.core.records.fromarrays(at, dtype=dtype)
+        # a = np.rec.fromarrays(at, dtype=dtype)
         return ra
 
     def _txt_footer(
