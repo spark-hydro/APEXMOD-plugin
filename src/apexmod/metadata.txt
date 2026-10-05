@@ -8,16 +8,16 @@
 
 [general]
 name=APEXMOD
-qgisMinimumVersion=3.0
+qgisMinimumVersion=3.44
 description=This plugin helps link APEX and MODFLOW model.
-version=1.5
+version=1.5.3
 author=Seonggyu Park
 email=seonggyu.park@brc.tamus.edu
 
 about=This plugin helps link APEX and MODFLOW model and visualize the results of APEX-MODFLOW simulation.
 
-tracker=github.com
-repository=https://github.com/spark-brc/APEXMOD-plugin.git
+tracker=https://github.com/spark-hydro/APEXMOD-plugin/issues
+repository=https://github.com/spark-hydro/APEXMOD-plugin
 # End of mandatory metadata
 
 # Recommended items:
@@ -26,13 +26,13 @@ repository=https://github.com/spark-brc/APEXMOD-plugin.git
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=
+tags=apex, modflow, groundwater, hydrology, apex-modflow
 
-homepage=
+homepage=https://github.com/spark-hydro/APEXMOD-plugin
 category=Plugins
 icon=am_icon.png
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
